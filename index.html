@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jingwen Wang</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* layout idea: warm paper page, one dark "screen" hero, work shown as tool cards, dark sign-off */
+  --paper:#f7f4ee;
+  --ink:#141413;
+  --night:#1b1b1a;
+  --smoke:#30302d;
+  --mute:#6e6a62;
+  --line:#e3ded4;
+  --display:"Archivo", "Arial Black", Helvetica, sans-serif;
+  --body:"Instrument Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: light;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--paper);color:var(--ink)}
+body{font-family:var(--body);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+img,svg,canvas{max-width:100%;display:block}
+.wrap{width:min(1180px,100% - 40px);margin-inline:auto}
+.display{font-family:var(--display);font-stretch:125%;font-weight:800;text-transform:uppercase;letter-spacing:-.01em;line-height:.98;text-wrap:balance}
+.pill{display:inline-flex;align-items:center;gap:.5em;border-radius:999px;padding:.85em 1.5em;font-family:var(--display);font-stretch:112%;font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;border:0;cursor:pointer;transition:transform .15s ease, background .15s ease}
+.pill:hover{transform:translateY(-1px)}
+.pill:focus-visible,a:focus-visible{outline:2px solid #e8a33d;outline-offset:3px}
+.pill.light{background:#fff;color:var(--ink)}
+.pill.dark{background:var(--smoke);color:#fff}
+.pill.ink{background:var(--ink);color:#fff}
+.pill.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--ink);padding:.7em 1.2em}
+
+/* top bar */
+header{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
+.mark{font-family:var(--display);font-stretch:125%;font-weight:800;font-size:19px;text-decoration:none;letter-spacing:-.01em}
+nav{display:flex;align-items:center;gap:22px;font-size:15px}
+nav a.txt{text-decoration:none;color:var(--mute)}
+nav a.txt:hover{color:var(--ink)}
+
+/* hero */
+.hero{position:relative;background:var(--night);color:#fff;overflow:hidden}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.55}
+.hero .shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(27,27,26,.92) 0%,rgba(27,27,26,.7) 45%,rgba(27,27,26,.15) 100%)}
+.hero .wrap{position:relative;padding:120px 0 72px;display:grid;gap:28px}
+.hero h1{font-size:clamp(40px,7.4vw,96px);max-width:12ch}
+.hero p.lede{max-width:56ch;font-size:clamp(17px,1.6vw,20px);color:#e9e6df}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:12px}
+.hero .meta{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:14px;color:#b9b5ad;margin-top:12px}
+.hero .meta span::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:#e8a33d;margin-right:8px;vertical-align:middle}
+
+/* tool strip */
+.strip{border-bottom:1px solid var(--line);overflow:hidden;background:var(--paper)}
+.strip .row{display:flex;gap:48px;padding:22px 0;white-space:nowrap;width:max-content;animation:slide 38s linear infinite}
+.strip span{font-family:var(--display);font-stretch:100%;font-weight:600;font-size:15px;color:var(--mute);letter-spacing:.02em}
+@keyframes slide{to{transform:translateX(-50%)}}
+
+/* sections */
+section.block{padding:96px 0}
+.head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin-bottom:40px}
+.head h2{font-size:clamp(30px,4.2vw,52px)}
+.head p{max-width:46ch;color:var(--mute)}
+
+/* work cards */
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.card{background:#fff;border:1px solid var(--line);border-radius:22px;overflow:hidden;display:flex;flex-direction:column}
+.card .vis{aspect-ratio:16/10;background:#efebe3;position:relative;overflow:hidden}
+.card .vis.dark{background:var(--night)}
+.card .body{padding:22px 24px 24px;display:grid;gap:10px;flex:1;align-content:start}
+.card .top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.card h3{font-family:var(--display);font-stretch:118%;font-weight:800;font-size:22px;text-transform:uppercase;letter-spacing:-.005em;line-height:1.05}
+.chip{font-size:12px;font-weight:600;border-radius:999px;padding:.3em .8em;background:#f1ede5;color:var(--mute);white-space:nowrap}
+.chip.live{background:#fbe9cc;color:#8a5410}
+.card p{color:#3d3b37;font-size:16px}
+.card .note{font-size:14px;color:var(--mute);border-top:1px dashed var(--line);padding-top:10px}
+.card .links{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.card .links a{font-size:14px;font-weight:600;text-decoration:none;border-bottom:1.5px solid var(--ink);padding-bottom:1px}
+.card .links a.todo{color:var(--mute);border-color:var(--line)}
+
+/* now */
+.now{display:grid;grid-template-columns:1.1fr 1fr;gap:20px}
+.panel{border-radius:22px;padding:32px;border:1px solid var(--line);background:#fff;display:grid;gap:14px;align-content:start}
+.panel.dark{background:var(--night);color:#fff;border-color:var(--night)}
+.panel .lab{font-family:var(--display);font-stretch:112%;font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#e8a33d}
+.panel h3{font-family:var(--display);font-stretch:120%;font-weight:800;font-size:26px;text-transform:uppercase;line-height:1.05}
+.panel ul{list-style:none;display:grid;gap:10px}
+.panel li{padding-left:18px;position:relative}
+.panel li::before{content:"";position:absolute;left:0;top:.7em;width:8px;height:1.5px;background:currentColor;opacity:.6}
+.panel.dark p,.panel.dark li{color:#dedad2}
+
+/* footer */
+footer{background:var(--night);color:#fff;padding:96px 0 40px}
+footer h2{font-size:clamp(40px,8vw,110px);max-width:11ch}
+footer .contact{display:flex;flex-wrap:wrap;gap:12px;margin:36px 0 64px;align-items:center}
+footer .addr{font-size:17px;color:#d6d2ca;margin-left:6px}
+footer .fine{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:13px;color:#8d8980;border-top:1px solid #33332f;padding-top:22px}
+
+@media (max-width:860px){
+  .grid,.now{grid-template-columns:1fr}
+  nav a.txt{display:none}
+  .hero .wrap{padding:88px 0 56px}
+  section.block{padding:72px 0}
+}
+@media (prefers-reduced-motion:reduce){
+  .strip .row{animation:none}
+  .pill{transition:none}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="mark" href="#top">Jingwen Wang</a>
+    <nav>
+      <a class="txt" href="#work">Work</a>
+      <a class="txt" href="#now">Now</a>
+      <a class="txt" href="#contact">Contact</a>
+      <a class="pill ink" href="#">Resume</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <canvas id="bands" aria-hidden="true"></canvas>
+    <div class="shade" aria-hidden="true"></div>
+    <div class="wrap">
+      <h1 class="display">Idea on Monday. Demo by Friday.</h1>
+      <p class="lede">I'm Jingwen. I study applied data science at USC, I co-founded a small LLM workflow startup, and I like turning new models into things people can actually try. I ship a rough version first, watch where it breaks, then fix that.</p>
+      <div class="ctas">
+        <a class="pill light" href="#work">See the work</a>
+        <a class="pill dark" href="#contact">Get in touch</a>
+      </div>
+      <div class="meta">
+        <span>Los Angeles</span>
+        <span>M.S. Applied Data Science, USC '27</span>
+        <span>Open to internships and new grad roles</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="strip" aria-label="Tools I build with">
+    <div class="row">
+      <span>GPT-4o</span><span>LangChain</span><span>LangGraph</span><span>MCP</span><span>Sentence-Transformers</span><span>FAISS</span><span>Pinecone</span><span>FastAPI</span><span>Redis</span><span>PyTorch</span><span>YOLOv5</span><span>Docker</span>
+      <span aria-hidden="true">GPT-4o</span><span aria-hidden="true">LangChain</span><span aria-hidden="true">LangGraph</span><span aria-hidden="true">MCP</span><span aria-hidden="true">Sentence-Transformers</span><span aria-hidden="true">FAISS</span><span aria-hidden="true">Pinecone</span><span aria-hidden="true">FastAPI</span><span aria-hidden="true">Redis</span><span aria-hidden="true">PyTorch</span><span aria-hidden="true">YOLOv5</span><span aria-hidden="true">Docker</span>
+    </div>
+  </div>
+
+  <section class="block" id="work">
+    <div class="wrap">
+      <div class="head">
+        <h2 class="display">Things I built</h2>
+        <p>Each one started as a problem I or someone near me actually had. Code is on GitHub; the notes say what went wrong along the way.</p>
+      </div>
+
+      <div class="grid">
+        <!-- 1. Demo in progress -->
+        <article class="card">
+          <div class="vis dark">
+            <svg viewBox="0 0 400 250" width="100%" height="100%" role="img" aria-label="Storyboard: one photo becomes three shots and a clip">
+              <rect width="400" height="250" fill="#1b1b1a"/>
+              <g font-family="Archivo, sans-serif" font-size="10" fill="#8d8980" letter-spacing="1">
+                <rect x="24" y="62" width="70" height="92" rx="8" fill="#30302d"/>
+                <circle cx="59" cy="96" r="16" fill="#5a5852"/><rect x="38" y="118" width="42" height="24" rx="10" fill="#5a5852"/>
+                <text x="24" y="174">PHOTO</text>
+                <path d="M106 108h24" stroke="#e8a33d" stroke-width="2"/><path d="M126 103l6 5-6 5" fill="none" stroke="#e8a33d" stroke-width="2"/>
+                <rect x="142" y="70" width="70" height="76" rx="6" fill="#3c3b37"/><text x="142" y="166">SHOT 1</text>
+                <rect x="220" y="70" width="70" height="76" rx="6" fill="#47463f"/><text x="220" y="166">SHOT 2</text>
+                <rect x="298" y="70" width="70" height="76" rx="6" fill="#53514a"/><text x="298" y="166">SHOT 3</text>
+                <circle cx="333" cy="108" r="14" fill="#fff"/><path d="M329 101l11 7-11 7z" fill="#1b1b1a"/>
+                <path d="M142 196 q 30 -14 60 0 t 60 0 t 60 0 t 46 0" fill="none" stroke="#6e6a62" stroke-width="1.5"/>
+                <text x="142" y="216">VOICE + MUSIC</text>
+              </g>
+            </svg>
+          </div>
+          <div class="body">
+            <div class="top"><h3>Photo to Short</h3><span class="chip live">Building now · Nov 2026</span></div>
+            <p>Upload one photo, write one line. An LLM plans three shots, keyframes keep the character consistent, then image-to-video and a voice track turn it into a clip you can post.</p>
+            <p class="note">Status: picking models and scoping the first three-shot version this week.</p>
+            <div class="links"><a class="todo" href="#">Demo video soon</a><a class="todo" href="#">Code soon</a></div>
+          </div>
+        </article>
+
+        <!-- 2. HaX -->
+        <article class="card">
+          <div class="vis">
+            <svg viewBox="0 0 400 250" width="100%" height="100%" role="img" aria-label="A vague goal split into a graph of tasks">
+              <rect width="400" height="250" fill="#efebe3"/>
+              <g font-family="Instrument Sans, sans-serif" font-size="11" fill="#141413">
+                <rect x="24" y="104" width="112" height="40" rx="20" fill="#141413"/>
+                <text x="40" y="128" fill="#fff">"help me launch…"</text>
+                <g stroke="#141413" stroke-width="1.5" fill="none">
+                  <path d="M136 124 C170 124 170 64 204 64"/><path d="M136 124h68"/><path d="M136 124 C170 124 170 184 204 184"/>
+                  <path d="M300 64 C330 64 330 124 352 124"/><path d="M300 124h52"/><path d="M300 184 C330 184 330 124 352 124"/>
+                </g>
+                <rect x="204" y="48" width="96" height="32" rx="8" fill="#fff" stroke="#141413"/><text x="216" y="68">research</text>
+                <rect x="204" y="108" width="96" height="32" rx="8" fill="#fff" stroke="#141413"/><text x="216" y="128">draft plan</text>
+                <rect x="204" y="168" width="96" height="32" rx="8" fill="#fff" stroke="#141413"/><text x="216" y="188">check sources</text>
+                <circle cx="362" cy="124" r="10" fill="#e8a33d"/>
+              </g>
+            </svg>
+          </div>
+          <div class="body">
+            <div class="top"><h3>HaX</h3><span class="chip">Co-founder · startup</span></div>
+            <p>People describe a vague goal; HaX turns it into a step-by-step workflow and runs it. I built the stack end to end: GPT-4o + LangChain planning, a retrieval layer for evidence, a Flask API and a web front end, demoed on AWS.</p>
+            <p class="note">Most fixes came from reading execution logs, finding where a workflow broke or confused people, and reworking how tasks get split up.</p>
+            <div class="links"><a href="https://github.com/gnauhuhsaij/hax">Code</a></div>
+          </div>
+        </article>
+
+        <!-- 3. Recommender -->
+        <article class="card">
+          <div class="vis">
+            <svg viewBox="0 0 400 250" width="100%" height="100%" role="img" aria-label="Ranked job list with sponsorship evidence">
+              <rect width="400" height="250" fill="#efebe3"/>
+              <g font-family="Instrument Sans, sans-serif" font-size="11" fill="#141413">
+                <g>
+                  <rect x="40" y="34" width="320" height="44" rx="10" fill="#fff"/>
+                  <text x="56" y="61" font-family="Archivo, sans-serif" font-weight="800" font-size="16">01</text>
+                  <rect x="92" y="48" width="130" height="8" rx="4" fill="#141413"/><rect x="92" y="62" width="80" height="6" rx="3" fill="#c9c3b7"/>
+                  <rect x="282" y="46" width="62" height="20" rx="10" fill="#fbe9cc"/><text x="290" y="60" fill="#8a5410">sponsors</text>
+                </g>
+                <g>
+                  <rect x="40" y="88" width="320" height="44" rx="10" fill="#fff"/>
+                  <text x="56" y="115" font-family="Archivo, sans-serif" font-weight="800" font-size="16">02</text>
+                  <rect x="92" y="102" width="110" height="8" rx="4" fill="#141413"/><rect x="92" y="116" width="96" height="6" rx="3" fill="#c9c3b7"/>
+                  <rect x="282" y="100" width="62" height="20" rx="10" fill="#fbe9cc"/><text x="290" y="114" fill="#8a5410">sponsors</text>
+                </g>
+                <g opacity=".55">
+                  <rect x="40" y="142" width="320" height="44" rx="10" fill="#fff"/>
+                  <text x="56" y="169" font-family="Archivo, sans-serif" font-weight="800" font-size="16">03</text>
+                  <rect x="92" y="156" width="120" height="8" rx="4" fill="#141413"/><rect x="92" y="170" width="70" height="6" rx="3" fill="#c9c3b7"/>
+                </g>
+                <text x="40" y="218" fill="#6e6a62">Recall@100 0.72 → 0.88 · NDCG@10 0.44 → 0.57</text>
+              </g>
+            </svg>
+          </div>
+          <div class="body">
+            <div class="top"><h3>Sponsor-aware job finder</h3><span class="chip">Personal tool · 2026</span></div>
+            <p>International new grads waste hours on jobs that will never sponsor a visa. I joined 4.27M H-1B filings with live postings from 7 job boards, then ranked matches with hybrid search, LLM scoring and a learned reranker. I use it in my own job search.</p>
+            <p class="note">It also runs as an MCP server, so an assistant like Claude can search and explain matches for me.</p>
+            <div class="links"><a class="todo" href="#">Code (add link)</a></div>
+          </div>
+        </article>
+
+        <!-- 4. CV research -->
+        <article class="card">
+          <div class="vis dark">
+            <svg viewBox="0 0 400 250" width="100%" height="100%" role="img" aria-label="Street scene with detection boxes">
+              <rect width="400" height="250" fill="#1b1b1a"/>
+              <path d="M0 190 L400 170 L400 250 L0 250Z" fill="#30302d"/>
+              <path d="M0 120 L120 96 L120 190 L0 190Z" fill="#26261f"/>
+              <path d="M280 90 L400 70 L400 172 L280 178Z" fill="#26261f"/>
+              <g fill="#5a5852"><path d="M150 186 l22 -26 l22 26z"/><path d="M212 182 l18 -22 l18 22z"/></g>
+              <g fill="none" stroke="#e8a33d" stroke-width="1.6">
+                <rect x="144" y="154" width="56" height="38"/><rect x="206" y="154" width="48" height="34"/>
+              </g>
+              <g font-family="Archivo, sans-serif" font-size="9" fill="#e8a33d" letter-spacing="1">
+                <text x="144" y="148">TENT 0.91</text><text x="206" y="148">TENT 0.84</text>
+              </g>
+              <text x="24" y="40" font-family="Archivo, sans-serif" font-size="10" fill="#8d8980" letter-spacing="1">STREET VIEW · 2,600+ IMAGES</text>
+            </svg>
+          </div>
+          <div class="body">
+            <div class="top"><h3>Seeing encampments</h3><span class="chip">USC research</span></div>
+            <p>At USC's Integrated Media Systems Center I fine-tuned a detector on Street View images I annotated myself (0.82 mAP@0.5), then placed each detection on the map and merged duplicates seen from different angles.</p>
+            <p class="note">The same tent shows up in many photos. Matching them by location and visual similarity lifted precision from 0.77 to 0.83.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="now" style="padding-top:0">
+    <div class="wrap now">
+      <div class="panel dark">
+        <span class="lab">Now · November 2026</span>
+        <h3>What I'm working on</h3>
+        <ul>
+          <li>Finishing Photo to Short: LoRA for character consistency, image-to-video, voice.</li>
+          <li>Second year of my M.S. at USC, graduating May 2027.</li>
+          <li>Looking for applied and creative AI roles: internships for 2027, full time from May 2027.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <span class="lab" style="color:var(--mute)">Off the keyboard</span>
+        <h3>I shoot photos and short videos</h3>
+        <p>It's where most of my taste for what looks good on a phone screen comes from.</p>
+        <div><a class="pill ghost" href="#">See the photos</a></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="contact">
+  <div class="wrap">
+    <h2 class="display">Let's make something people share.</h2>
+    <div class="contact">
+      <a class="pill light" href="mailto:jwang426@usc.edu">Email me</a>
+      <a class="pill dark" href="https://github.com/gnauhuhsaij">GitHub</a>
+      <a class="pill dark" href="#">LinkedIn</a>
+      <span class="addr">jwang426@usc.edu</span>
+    </div>
+    <div class="fine"><span>© 2026 Jingwen Wang</span><span>Built by hand in Los Angeles</span></div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const c=document.getElementById('bands');
+  if(!c) return;
+  const ctx=c.getContext('2d');
+  const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let w,h;
+  function size(){
+    const r=c.getBoundingClientRect();
+    w=c.width=Math.max(1,Math.floor(r.width/3));
+    h=c.height=Math.max(1,Math.floor(r.height/3));
+  }
+  function draw(t){
+    for(let x=0;x<w;x++){
+      const u=x/w;
+      const v=Math.sin(u*28+t*0.6+Math.sin(u*5+t*0.25)*2.2);
+      const k=Math.pow((v+1)/2,2.2);
+      const g=Math.floor(18+k*200);
+      ctx.fillStyle='rgb('+g+','+(g-2)+','+(g-6)+')';
+      ctx.fillRect(x,0,1,h);
+    }
+  }
+  size();
+  window.addEventListener('resize',size);
+  if(reduce){draw(1);return;}
+  let start=performance.now();
+  (function loop(now){draw((now-start)/1000);requestAnimationFrame(loop);})(start);
+})();
+</script>
+</body>
+</html>
